@@ -165,7 +165,7 @@ while running:
     rotation_relative = rotation_pos[0] - rotation_center[0]
     joystick_relative = (joystick_pos[0] - joystick_center[0], joystick_center[1] - joystick_pos[1])
 
-    print(rotation_relative)
+
     calc_vel(joystick_relative, rotation_relative)
     # print(f"{v1}, {v2}, {v3}, {v4}")
 
