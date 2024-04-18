@@ -13,6 +13,17 @@ pros::Motor fl(FLPORT, DRIVEGEARSET, 0), // m1
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
+// Clamp returns the input if it is within the min & max range, otherwise it returns min if it is below or max if above
+int clamp(int min, int max, int x) {
+	if (x > max) {
+		return(max);
+	} else if (x < min) {
+		return(min);
+	} else {
+		return(x);
+	}
+}
+
 // Runs each wheel individually to check that the motor setup was correct, uses the dpad and X & B buttons to control each wheel
 void calibrateWheels() {
 	if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) { // m1
@@ -42,17 +53,10 @@ void xDrive() {
 	int vm4 = (Ly - Lx) + Rx;
 
 	// Clamp values
-	vm1 = vm1 > 127 ? 127 : vm1;
-	vm1 = vm1 < -127 ? -127 : vm1;
-
-	vm2 = vm2 > 127 ? 127 : vm2;
-	vm2 = vm2 < -127 ? -127 : vm2;
-
-	vm3 = vm3 > 127 ? 127 : vm3;
-	vm3 = vm3 < -127 ? -127 : vm3;
-
-	vm4 = vm4 > 127 ? 127 : vm4;
-	vm4 = vm4 < -127 ? -127 : vm4;
+	vm1 = clamp(-127, 127, vm1);
+	vm2 = clamp(-127, 127, vm2);
+	vm3 = clamp(-127, 127, vm3);
+	vm4 = clamp(-127, 127, vm4);
 
 	// Assign Values
 	fl = vm1;
