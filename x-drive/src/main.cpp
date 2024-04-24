@@ -1,15 +1,15 @@
 #include "main.h"
 
-#define FLPORT 1
-#define FRPORT 2
-#define BLPORT 3
-#define BRPORT 4
+#define FLPORT 11
+#define FRPORT 1
+#define BLPORT 20
+#define BRPORT 10
 #define DRIVEGEARSET pros::E_MOTOR_GEARSET_18
 
 pros::Motor fl(FLPORT, DRIVEGEARSET, 0), // m1
-			fr(FRPORT, DRIVEGEARSET, 0), // m2
+			fr(FRPORT, DRIVEGEARSET, 1), // m2
 			bl(BLPORT, DRIVEGEARSET, 0), // m4
-			br(BRPORT, DRIVEGEARSET, 0); // m3
+			br(BRPORT, DRIVEGEARSET, 1); // m3
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
@@ -28,15 +28,23 @@ int clamp(int min, int max, int x) {
 void calibrateWheels() {
 	if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) { // m1
 		fl = 50;
+	} else {
+		fl = 0;
 	}
 	if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { // m4
 		bl = 50;
+	} else {
+		bl = 0;
 	}
 	if (master.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { // m2
 		fr = 50;
+	} else {
+		fr = 0;
 	}
 	if (master.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { // m3
 		br = 50;
+	} else {
+		br = 0;
 	}
 }
 
@@ -122,8 +130,8 @@ void autonomous() {}
  */
 void opcontrol() {
 	while (true) {
-		// xDrive();
-		calibrateWheels();
+		xDrive();
+		// calibrateWheels();
 
 		pros::delay(20);
 	}
